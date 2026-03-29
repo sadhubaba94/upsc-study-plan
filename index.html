@@ -735,7 +735,11 @@
   <div class="paper-meta">
     <span id="today-date"></span>
     <span>Vol. 1 · No. 1 · Hyderabad Edition</span>
-    <span>₹0.00 · Free for the Determined</span>
+    <span id="auth-container" style="display:flex; gap:10px; align-items:center;">
+      <span id="user-info" style="display:none; color: var(--saffron); font-weight: bold;"></span>
+      <button id="btn-login" class="oracle-btn" style="padding: 4px 10px; border-radius: 4px;">Login</button>
+      <button id="btn-logout" class="oracle-btn" style="padding: 4px 10px; border-radius: 4px; display:none; background: var(--rose);">Logout</button>
+    </span>
   </div>
   <div class="paper-title">MISSION <span>IAS</span></div>
   <div class="paper-tagline">The Official Command Centre for Your UPSC Civil Services Journey — 300 Days Edition</div>
@@ -1199,11 +1203,17 @@ const LS_CHECKIN_KEY = 'upsc_checkin_v2';
 function loadChecked() {
   try { return JSON.parse(localStorage.getItem(LS_TOPICS_KEY) || '{}'); } catch { return {}; }
 }
-function saveChecked(obj) { localStorage.setItem(LS_TOPICS_KEY, JSON.stringify(obj)); }
+function saveChecked(obj) { 
+  localStorage.setItem(LS_TOPICS_KEY, JSON.stringify(obj)); 
+  if(window.syncToCloud) window.syncToCloud();
+}
 function loadStreak() {
   try { return JSON.parse(localStorage.getItem(LS_STREAK_KEY) || '{"count":0,"days":[]}'); } catch { return {count:0,days:[]}; }
 }
-function saveStreak(s) { localStorage.setItem(LS_STREAK_KEY, JSON.stringify(s)); }
+function saveStreak(s) { 
+  localStorage.setItem(LS_STREAK_KEY, JSON.stringify(s)); 
+  if(window.syncToCloud) window.syncToCloud();
+}
 
 let checked = loadChecked();
 let streak = loadStreak();
@@ -1385,6 +1395,7 @@ function checkin() {
   saveStreak(streak);
   localStorage.setItem(LS_CHECKIN_KEY, today);
   renderStreak();
+  if(window.syncToCloud) window.syncToCloud();
   showToast(`🔥 Streak: ${streak.count} days! Keep going!`);
 }
 
@@ -1423,6 +1434,84 @@ renderSubjects();
 updateStats();
 renderStreak();
 refreshOracle();
+</script>
+
+<!-- FIREBASE & CLOUD SYNC -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAZPoojkJuS8L9AD9rzz_kp2rBlT3QXXtw",
+    authDomain: "login-app-daa51.firebaseapp.com",
+    projectId: "login-app-daa51",
+    storageBucket: "login-app-daa51.firebasestorage.app",
+    messagingSenderId: "781090638184",
+    appId: "1:781090638184:web:845dd01dd24e7f0768eedd",
+    measurementId: "G-QY7PYXGKCD"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+  
+  // Change this URL once your Python Flask app is deployed (e.g., https://your-app.onrender.com/api)
+  const API_BASE = "http://127.0.0.1:5000/api";
+  let currentUser = null;
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      currentUser = user;
+      document.getElementById('btn-login').style.display = 'none';
+      document.getElementById('btn-logout').style.display = 'inline-block';
+      document.getElementById('user-info').style.display = 'inline-block';
+      document.getElementById('user-info').textContent = `Hi, ${user.displayName.split(' ')[0]}`;
+      await syncFromCloud();
+    } else {
+      currentUser = null;
+      document.getElementById('btn-login').style.display = 'inline-block';
+      document.getElementById('btn-logout').style.display = 'none';
+      document.getElementById('user-info').style.display = 'none';
+    }
+  });
+
+  document.getElementById('btn-login').addEventListener('click', () => {
+    signInWithPopup(auth, provider).catch(error => showToast(`⚠️ Login Failed: ${error.message}`));
+  });
+
+  document.getElementById('btn-logout').addEventListener('click', () => {
+    signOut(auth).then(() => showToast('🔒 Logged out successfully.'));
+  });
+
+  // Cloud Synchronization Handlers
+  window.syncToCloud = async function() {
+    if (!currentUser) return;
+    const token = await currentUser.getIdToken();
+    await fetch(`${API_BASE}/sync`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({
+        topics: localStorage.getItem('upsc_topics_v2'),
+        streak: localStorage.getItem('upsc_streak_v2'),
+        last_checkin: localStorage.getItem('upsc_checkin_v2')
+      })
+    }).catch(err => console.error("Cloud sync failed", err));
+  };
+
+  async function syncFromCloud() {
+    const token = await currentUser.getIdToken();
+    const res = await fetch(`${API_BASE}/load`, { headers: { 'Authorization': `Bearer ${token}` } });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.topics && data.topics !== '{}') localStorage.setItem('upsc_topics_v2', data.topics);
+      if (data.streak && data.streak !== '{"count":0,"days":[]}') localStorage.setItem('upsc_streak_v2', data.streak);
+      if (data.last_checkin) localStorage.setItem('upsc_checkin_v2', data.last_checkin);
+      
+      // Reload data to reflect cloud state
+      location.reload(); 
+    }
+  }
 </script>
 </body>
 </html>
