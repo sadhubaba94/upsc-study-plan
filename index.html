@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mission IAS — 300 Days Command Centre</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream: #FFFDF4;
+    --warm-white: #FFF8ED;
+    --saffron: #F97316;
+    --saffron-light: #FED7AA;
+    --teal: #0D9488;
+    --teal-light: #CCFBF1;
+    --indigo: #4338CA;
+    --indigo-light: #E0E7FF;
+    --rose: #E11D48;
+    --rose-light: #FFE4E6;
+    --gold: #D97706;
+    --gold-light: #FEF3C7;
+    --emerald: #059669;
+    --emerald-light: #D1FAE5;
+    --violet: #7C3AED;
+    --violet-light: #EDE9FE;
+    --ink: #1C1917;
+    --ink-light: #57534E;
+    --border: #E7E5E4;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+    --shadow-lg: 0 20px 40px rgba(0,0,0,0.10);
+    --r: 16px;
+    --r-sm: 10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(249,115,22,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 85% 80%, rgba(67,56,202,0.05) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(13,148,136,0.04) 0%, transparent 60%);
+  }
+
+  /* ── TICKER ── */
+  .ticker-wrap {
+    background: var(--ink);
+    color: #fff;
+    padding: 7px 0;
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .ticker-inner {
+    display: flex;
+    gap: 60px;
+    animation: ticker 45s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .ticker-inner span {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+  }
+  .ticker-inner span.accent { color: var(--saffron); font-weight: 700; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── NEWSPAPER HEADER ── */
+  .newspaper-header {
+    border-bottom: 3px double var(--ink);
+    padding: 0 32px 12px;
+    text-align: center;
+    position: relative;
+    background: var(--cream);
+    overflow: hidden;
+  }
+  .paper-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    padding: 10px 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .paper-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 80px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    padding: 8px 0;
+  }
+  .paper-title span { color: var(--saffron); }
+  .paper-tagline {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+    margin-top: 4px;
+  }
+
+  /* ── COUNTDOWN BLOCK ── */
+  .countdown-section {
+    background: var(--ink);
+    color: #fff;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  .countdown-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 6px;
+  }
+  .countdown-units {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+  }
+  .cd-unit {
+    text-align: center;
+    position: relative;
+  }
+  .cd-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 8px 14px;
+    min-width: 68px;
+    display: block;
+  }
+  .cd-unit .cd-label {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-top: 5px;
+  }
+  .cd-sep {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 36px;
+    color: rgba(255,255,255,0.2);
+    padding-bottom: 12px;
+    font-weight: 700;
+  }
+  .exam-date-info {
+    text-align: right;
+  }
+  .exam-date-info .big-date {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--saffron);
+  }
+  .progress-pill {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .progress-pill-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-pill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--saffron), #FBBF24);
+    border-radius: 99px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-pill-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+  }
+  .progress-pill-label span { color: var(--saffron); font-weight: 700; font-size: 14px; }
+
+  /* ── MAIN LAYOUT ── */
+  .page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  /* ── SECTION HEADINGS ── */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .section-head h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .section-head .vol {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    border-left: 2px solid var(--border);
+    padding-left: 12px;
+  }
+
+  /* ── DAILY ORACLE ── */
+  .oracle-card {
+    background: linear-gradient(135deg, #1C1917 0%, #292524 100%);
+    border-radius: var(--r);
+    padding: 28px 32px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+  .oracle-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(249,115,22,0.25), transparent 70%);
+  }
+  .oracle-card::after {
+    content: '✦';
+    position: absolute;
+    bottom: 16px; right: 24px;
+    font-size: 80px;
+    color: rgba(255,255,255,0.04);
+    font-family: serif;
+  }
+  .oracle-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--saffron);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .oracle-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: rgba(255,255,255,0.9);
+  }
+  .oracle-topics {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .oracle-topic-chip {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 99px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .oracle-topic-chip:hover { background: rgba(249,115,22,0.2); border-color: var(--saffron); color: #fff; }
+  .oracle-btn {
+    background: var(--saffron);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .oracle-btn:hover { background: #EA6812; transform: translateY(-1px); }
+
+  /* ── STREAK BAR ── */
+  .streak-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 40px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .streak-icon { font-size: 28px; }
+  .streak-info { flex: 1; }
+  .streak-info .s-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--saffron);
+    line-height: 1;
+  }
+  .streak-info .s-label { font-size: 11px; color: var(--ink-light); letter-spacing: 0.04em; }
+  .streak-dots {
+    display: flex;
+    gap: 4px;
+  }
+  .streak-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--border);
+    position: relative;
+    cursor: default;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    transition: all 0.3s;
+  }
+  .streak-dot.active { background: var(--saffron); color: #fff; }
+  .streak-dot.today { background: var(--emerald); color: #fff; box-shadow: 0 0 0 3px rgba(5,150,105,0.25); }
+
+  /* ── SUBJECT GRID ── */
+  .subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  /* ── SUBJECT CARD ── */
+  .subject-card {
+    background: #fff;
+    border-radius: var(--r);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.3s, transform 0.3s;
+  }
+  .subject-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+
+  .card-header {
+    padding: 20px 24px 16px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .card-gs1 { --accent: var(--saffron); --accent-light: var(--saffron-light); }
+  .card-gs2 { --accent: var(--teal); --accent-light: var(--teal-light); }
+  .card-gs3 { --accent: var(--indigo); --accent-light: var(--indigo-light); }
+  .card-gs4 { --accent: var(--rose); --accent-light: var(--rose-light); }
+  .card-csat { --accent: var(--gold); --accent-light: var(--gold-light); }
+  .card-anthro { --accent: var(--violet); --accent-light: var(--violet-light); }
+
+  .card-header::before { background: var(--accent); }
+
+  .card-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .card-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 3px 9px;
+    border-radius: 99px;
+  }
+  .card-toggle-icon {
+    color: var(--ink-light);
+    font-size: 18px;
+    transition: transform 0.3s;
+  }
+  .card-header.open .card-toggle-icon { transform: rotate(180deg); }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 700;
+    margin: 10px 0 4px;
+  }
+  .card-subtitle { font-size: 12px; color: var(--ink-light); }
+
+  .card-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .mini-bar {
+    flex: 1;
+    height: 5px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .mini-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  .mini-pct {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 36px;
+    text-align: right;
+  }
+
+  /* ── TOPICS LIST ── */
+  .card-body {
+    display: none;
+    padding: 8px 24px 20px;
+  }
+  .card-body.open { display: block; }
+
+  .topic-group-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin: 16px 0 8px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+  }
+
+  .topic-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .topic-item:hover { background: rgba(0,0,0,0.03); }
+
+  .topic-cb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    background: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 1px;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .topic-cb:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .topic-cb:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .topic-label {
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--ink);
+    flex: 1;
+    transition: color 0.2s;
+  }
+  .topic-item.done .topic-label {
+    text-decoration: line-through;
+    color: var(--ink-light);
+  }
+  .topic-difficulty {
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 99px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .diff-h { background: #FEE2E2; color: #991B1B; }
+  .diff-m { background: #FEF3C7; color: #92400E; }
+  .diff-e { background: #D1FAE5; color: #065F46; }
+
+  /* ── MEMORIZATION SECTION ── */
+  .memo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+    margin-bottom: 48px;
+  }
+  .memo-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 22px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .memo-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .memo-emoji { font-size: 28px; margin-bottom: 10px; display: block; }
+  .memo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .memo-desc { font-size: 12.5px; color: var(--ink-light); line-height: 1.6; }
+  .memo-tag {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 99px;
+  }
+  .memo-card:nth-child(1) .memo-tag { background: var(--saffron-light); color: #C2410C; }
+  .memo-card:nth-child(2) .memo-tag { background: var(--teal-light); color: #0F766E; }
+  .memo-card:nth-child(3) .memo-tag { background: var(--indigo-light); color: #3730A3; }
+  .memo-card:nth-child(4) .memo-tag { background: var(--rose-light); color: #9F1239; }
+  .memo-card:nth-child(5) .memo-tag { background: var(--gold-light); color: #92400E; }
+  .memo-card:nth-child(6) .memo-tag { background: var(--violet-light); color: #5B21B6; }
+  .memo-card:nth-child(7) .memo-tag { background: var(--emerald-light); color: #065F46; }
+
+  /* ── STUDY PLAN TIMELINE ── */
+  .timeline-section {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    box-shadow: var(--shadow-sm);
+  }
+  .phase-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 24px;
+    position: relative;
+  }
+  .phase-grid::before {
+    content: '';
+    position: absolute;
+    top: 22px; left: 11%; right: 11%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--saffron), var(--teal), var(--indigo), var(--rose));
+    z-index: 0;
+  }
+  .phase {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    padding: 0 8px;
+  }
+  .phase-dot {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin: 0 auto 12px;
+    position: relative;
+    z-index: 2;
+    border: 3px solid #fff;
+  }
+  .p1 .phase-dot { background: var(--saffron-light); }
+  .p2 .phase-dot { background: var(--teal-light); }
+  .p3 .phase-dot { background: var(--indigo-light); }
+  .p4 .phase-dot { background: var(--rose-light); }
+  .phase-title { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+  .phase-days { font-size: 11px; color: var(--ink-light); margin-bottom: 8px; }
+  .phase-topics { font-size: 11px; color: var(--ink-light); line-height: 1.6; }
+
+  /* ── GLOBAL PROGRESS ── */
+  .global-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 48px;
+  }
+  .stat-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .stat-name { font-size: 11px; color: var(--ink-light); margin-top: 4px; letter-spacing: 0.04em; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    border-top: 1px solid var(--border);
+    padding: 24px;
+    font-size: 12px;
+    color: var(--ink-light);
+    letter-spacing: 0.04em;
+  }
+  .footer strong { color: var(--saffron); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── ROULETTE BUTTON ── */
+  .roulette-btn {
+    position: fixed;
+    bottom: 32px; left: 32px;
+    background: linear-gradient(135deg, var(--violet), var(--indigo));
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 22px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    font-family: 'DM Sans', sans-serif;
+    z-index: 99;
+  }
+  .roulette-btn:hover { transform: scale(1.05) translateY(-2px); }
+  .roulette-btn .spin-icon { display: inline-block; transition: transform 0.5s; }
+  .roulette-btn:hover .spin-icon { transform: rotate(180deg); }
+
+  @media (max-width: 768px) {
+    .countdown-section { grid-template-columns: 1fr; text-align: center; }
+    .exam-date-info { text-align: center; }
+    .subjects-grid { grid-template-columns: 1fr; }
+    .phase-grid { grid-template-columns: 1fr 1fr; }
+    .phase-grid::before { display: none; }
+    .roulette-btn span.label { display: none; }
+    .paper-meta { flex-direction: column; gap: 4px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker">
+    <span class="accent">✦ MISSION IAS</span>
+    <span>300 Days to Glory</span>
+    <span class="accent">✦</span>
+    <span>GS Paper I · II · III · IV</span>
+    <span class="accent">✦</span>
+    <span>Optional: Anthropology</span>
+    <span class="accent">✦</span>
+    <span>CSAT · Essay · Interview</span>
+    <span class="accent">✦</span>
+    <span>Stay Consistent. Stay Focused.</span>
+    <span class="accent">✦ MISSION IAS</span>
+    <span>300 Days to Glory</span>
+    <span class="accent">✦</span>
+    <span>GS Paper I · II · III · IV</span>
+    <span class="accent">✦</span>
+    <span>Optional: Anthropology</span>
+    <span class="accent">✦</span>
+    <span>CSAT · Essay · Interview</span>
+    <span class="accent">✦</span>
+    <span>Stay Consistent. Stay Focused.</span>
+  </div>
+</div>
+
+<!-- NEWSPAPER HEADER -->
+<div class="newspaper-header">
+  <div class="paper-meta">
+    <span id="today-date"></span>
+    <span>Vol. 1 · No. 1 · Hyderabad Edition</span>
+    <span>₹0.00 · Free for the Determined</span>
+  </div>
+  <div class="paper-title">MISSION <span>IAS</span></div>
+  <div class="paper-tagline">The Official Command Centre for Your UPSC Civil Services Journey — 300 Days Edition</div>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="countdown-section">
+  <div>
+    <div class="countdown-label">⏱ Time Remaining Until Prelims</div>
+    <div class="countdown-units">
+      <div class="cd-unit"><span class="cd-number" id="cd-days">000</span><div class="cd-label">Days</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><span class="cd-number" id="cd-hrs">00</span><div class="cd-label">Hours</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><span class="cd-number" id="cd-min">00</span><div class="cd-label">Minutes</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><span class="cd-number" id="cd-sec">00</span><div class="cd-label">Seconds</div></div>
+    </div>
+  </div>
+  <div style="opacity:0.15;font-size:48px;color:#fff;font-family:serif;">✦</div>
+  <div class="exam-date-info">
+    <div class="countdown-label">Prelims Target Date</div>
+    <div class="big-date">May 2027</div>
+    <div style="color:rgba(255,255,255,0.4);font-size:12px;margin-top:4px;margin-bottom:16px;">UPSC CSE Prelims</div>
+    <div class="progress-pill">
+      <div class="progress-pill-bar"><div class="progress-pill-fill" id="overall-bar" style="width:0%"></div></div>
+      <div class="progress-pill-label">Overall Progress: <span id="overall-pct">0%</span> topics done</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-container">
+
+  <!-- GLOBAL STATS -->
+  <div class="global-stats">
+    <div class="stat-box">
+      <div class="stat-val" id="total-done" style="color:var(--emerald)">0</div>
+      <div class="stat-name">Topics Completed</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="total-remaining" style="color:var(--saffron)">0</div>
+      <div class="stat-name">Topics Remaining</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="streak-count" style="color:var(--rose)">0</div>
+      <div class="stat-name">Day Streak 🔥</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="days-left-stat" style="color:var(--indigo)">300</div>
+      <div class="stat-name">Days Remaining</div>
+    </div>
+  </div>
+
+  <!-- STREAK -->
+  <div class="streak-bar">
+    <div class="streak-icon">🔥</div>
+    <div class="streak-info">
+      <div class="s-num" id="streak-display">0</div>
+      <div class="s-label">Day Streak — Check in daily to keep it alive!</div>
+    </div>
+    <div>
+      <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-light);margin-bottom:6px;">Last 7 Days</div>
+      <div class="streak-dots" id="streak-dots"></div>
+    </div>
+    <div style="margin-left:16px;">
+      <button class="oracle-btn" onclick="checkin()" style="background:var(--emerald)">✓ Check In Today</button>
+    </div>
+  </div>
+
+  <!-- DAILY ORACLE -->
+  <div class="oracle-card">
+    <div class="oracle-label">✦ Today's Study Oracle</div>
+    <div class="oracle-title">Your 3 Focus Topics for Today</div>
+    <div class="oracle-topics" id="oracle-topics">
+      <span class="oracle-topic-chip">Loading…</span>
+    </div>
+    <button class="oracle-btn" onclick="refreshOracle()">🎲 Shuffle Topics</button>
+    <span style="margin-left:10px;font-size:11px;color:rgba(255,255,255,0.3)">Picks from your incomplete topics</span>
+  </div>
+
+  <!-- STUDY PLAN TIMELINE -->
+  <div class="timeline-section">
+    <div class="section-head">
+      <h2>Phase-wise Study Plan</h2>
+      <span class="vol">300-Day Roadmap</span>
+    </div>
+    <div class="phase-grid">
+      <div class="phase p1">
+        <div class="phase-dot">🌱</div>
+        <div class="phase-title">Foundation</div>
+        <div class="phase-days">Days 1–75</div>
+        <div class="phase-topics">NCERT Basics · Ancient & Medieval History · Indian Society · Physical Geography · Polity Foundations · Anthropology P1 Basics</div>
+      </div>
+      <div class="phase p2">
+        <div class="phase-dot">📚</div>
+        <div class="phase-title">Coverage</div>
+        <div class="phase-days">Days 76–175</div>
+        <div class="phase-topics">Modern History · World History · Economy Basics · Governance · Environment · Science & Tech · Anthropology P1 Advanced</div>
+      </div>
+      <div class="phase p3">
+        <div class="phase-dot">⚡</div>
+        <div class="phase-title">Revision</div>
+        <div class="phase-days">Days 176–250</div>
+        <div class="phase-topics">GS 1–4 Revision Cycle · Anthropology P2 Indian · Ethics & Case Studies · Current Affairs Integration</div>
+      </div>
+      <div class="phase p4">
+        <div class="phase-dot">🎯</div>
+        <div class="phase-title">Mock Drills</div>
+        <div class="phase-days">Days 251–300</div>
+        <div class="phase-topics">Full-length Tests · PYQ Practice · Weak Area Sprints · Current Affairs Marathon · Final Revision</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBJECTS -->
+  <div class="section-head">
+    <h2>Subject-wise Topic Tracker</h2>
+    <span class="vol">Check off as you cover each topic</span>
+  </div>
+  <div class="subjects-grid" id="subjects-grid"></div>
+
+  <!-- MEMORIZATION -->
+  <div class="section-head">
+    <h2>Memorization Strategies</h2>
+    <span class="vol">Science-backed techniques</span>
+  </div>
+  <div class="memo-grid">
+    <div class="memo-card">
+      <span class="memo-emoji">🃏</span>
+      <div class="memo-title">Spaced Repetition (Leitner Box)</div>
+      <div class="memo-desc">Review topics at increasing intervals — Day 1, Day 3, Day 7, Day 14, Day 30. Use Anki or physical cards. This fights the forgetting curve and cements long-term memory.</div>
+      <span class="memo-tag">🔬 Science-backed #1</span>
+    </div>
+    <div class="memo-card">
+      <span class="memo-emoji">🗺️</span>
+      <div class="memo-title">Mind Mapping</div>
+      <div class="memo-desc">Draw radial maps connecting concepts. For eg: Constitution → Articles → Amendments → Case Laws. Visual networks are recalled 60% better than linear notes.</div>
+      <span class="memo-tag">Visual Learner</span>
+    </div>
+    <div class="memo-card">
+      <span class="memo-emoji">🧑‍🏫</span>
+      <div class="memo-title">Feynman Technique</div>
+      <div class="memo-desc">Explain any topic out loud as if teaching a 10-year-old. Where you stumble = what you don't know. Go back, re-read, simplify, repeat.</div>
+      <span class="memo-tag">Deep Understanding</span>
+    </div>
+    <div class="memo-card">
+      <span class="memo-emoji">🔤</span>
+      <div class="memo-title">Mnemonics & Acronyms</div>
+      <div class="memo-desc">Create memorable codes: "DPSP — Directive Principles State Policy" → "Don't Panic, Study Properly." Make them funny or personal — bizarre mnemonics stick best.</div>
+      <span class="memo-tag">Quick Recall</span>
+    </div>
+    <div class="memo-card">
+      <span class="memo-emoji">⚡</span>
+      <div class="memo-title">Active Recall Testing</div>
+      <div class="memo-desc">Close your notes and write down everything you remember. Then check. This retrieval practice is proven to be 3x more effective than re-reading alone.</div>
+      <span class="memo-tag">High Impact</span>
+    </div>
+    <div class="memo-card">
+      <span class="memo-emoji">📖</span>
+      <div class="memo-title">The 3R Method</div>
+      <div class="memo-desc">Read → Recite (without looking) → Review (compare). Apply to every chapter. Ideal for static subjects like Polity, History, and Anthropology theory.</div>
+      <span class="memo-tag">Structured Study</span>
+    </div>
+    <div class="memo-card">
+      <span class="memo-emoji">🎭</span>
+      <div class="memo-title">Story / Palace Method</div>
+      <div class="memo-desc">Link facts to a vivid story or place them in a mental walk through your house. Used by memory champions. Great for timelines, battles, constitutional articles, and tribal studies.</div>
+      <span class="memo-tag">For History & Anthro</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>Mission IAS</strong> — Built for your 300-Day Journey · Progress saved locally in your browser ·
+  <em>"Discipline is the bridge between goals and accomplishment."</em>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ROULETTE -->
+<button class="roulette-btn" onclick="refreshOracle()">
+  <span class="spin-icon">🎲</span>
+  <span class="label">Topic Roulette</span>
+</button>
+
+<script>
+// ═══════════════════════════════════════════
+//  DATA — SUBJECTS & TOPICS
+// ═══════════════════════════════════════════
+const SUBJECTS = [
+  {
+    id: 'gs1', label: 'GS Paper I', cls: 'card-gs1',
+    title: 'GS Paper I — Society, Heritage & World',
+    subtitle: 'History · Geography · Art · Society',
+    groups: [
+      { name: 'Indian History', topics: [
+        { t: 'Indus Valley Civilisation', d: 'm' },
+        { t: 'Vedic Period & Later Vedic Age', d: 'm' },
+        { t: 'Jainism & Buddhism', d: 'e' },
+        { t: 'Maurya Empire & Ashoka', d: 'm' },
+        { t: 'Gupta Period — Golden Age', d: 'm' },
+        { t: 'Delhi Sultanate', d: 'm' },
+        { t: 'Mughal Empire', d: 'h' },
+        { t: 'Bhakti & Sufi Movements', d: 'e' },
+        { t: 'Rise of Maratha Power', d: 'm' },
+      ]},
+      { name: 'Modern History & Freedom Struggle', topics: [
+        { t: 'British Conquest of India', d: 'm' },
+        { t: '1857 Revolt — Causes & Consequences', d: 'h' },
+        { t: 'Indian National Congress — Moderates & Extremists', d: 'm' },
+        { t: 'Gandhi Era — Non-cooperation, CDM, QIM', d: 'h' },
+        { t: 'Revolutionary Movements', d: 'm' },
+        { t: 'Partition & Independence', d: 'h' },
+        { t: 'Post-independence Consolidation', d: 'm' },
+      ]},
+      { name: 'World History', topics: [
+        { t: 'French Revolution', d: 'm' },
+        { t: 'World War I — Causes & Impact', d: 'h' },
+        { t: 'Rise of Nazism & Fascism', d: 'm' },
+        { t: 'World War II', d: 'h' },
+        { t: 'Cold War Era', d: 'm' },
+        { t: 'Colonialism & Decolonisation', d: 'e' },
+      ]},
+      { name: 'Indian Society & Culture', topics: [
+        { t: 'Salient Features of Indian Society', d: 'e' },
+        { t: 'Diversity, Communalism & Regionalism', d: 'm' },
+        { t: 'Social Empowerment — Women, SC/ST', d: 'm' },
+        { t: 'Population & Urbanisation', d: 'e' },
+        { t: 'Art Forms — Classical Dance & Music', d: 'm' },
+        { t: 'Paintings & Architecture', d: 'm' },
+        { t: 'Fairs, Festivals & Cuisines', d: 'e' },
+        { t: 'UNESCO World Heritage Sites in India', d: 'e' },
+      ]},
+      { name: 'Geography', topics: [
+        { t: 'Physical Geography — Geomorphology', d: 'h' },
+        { t: 'Climatology & Monsoons', d: 'h' },
+        { t: 'Oceanography', d: 'm' },
+        { t: 'Indian Physical Features', d: 'm' },
+        { t: 'Natural Vegetation & Wildlife', d: 'e' },
+        { t: 'Economic Geography — Agriculture & Industry', d: 'm' },
+        { t: 'World Regions & Countries', d: 'e' },
+      ]},
+    ]
+  },
+  {
+    id: 'gs2', label: 'GS Paper II', cls: 'card-gs2',
+    title: 'GS Paper II — Governance & IR',
+    subtitle: 'Polity · Constitution · Social Justice · IR',
+    groups: [
+      { name: 'Indian Constitution & Polity', topics: [
+        { t: 'Preamble & Key Features', d: 'e' },
+        { t: 'Fundamental Rights (Art 12–35)', d: 'h' },
+        { t: 'Directive Principles (Art 36–51)', d: 'm' },
+        { t: 'Fundamental Duties', d: 'e' },
+        { t: 'Parliament — Structure & Functions', d: 'h' },
+        { t: 'President & Vice President', d: 'm' },
+        { t: 'Prime Minister & Council of Ministers', d: 'm' },
+        { t: 'Judiciary — Supreme & High Courts', d: 'h' },
+        { t: 'Federal Structure & Centre-State', d: 'h' },
+        { t: 'Emergency Provisions', d: 'h' },
+        { t: 'Constitutional Amendments (Key)', d: 'm' },
+        { t: 'Panchayati Raj (73rd & 74th Amendment)', d: 'm' },
+        { t: 'Constitutional Bodies — EC, CAG, UPSC', d: 'm' },
+        { t: 'Statutory & Quasi-judicial Bodies', d: 'm' },
+      ]},
+      { name: 'Governance', topics: [
+        { t: 'Good Governance — Transparency & Accountability', d: 'e' },
+        { t: 'RTI Act & Citizen Charters', d: 'e' },
+        { t: 'e-Governance & Digital India', d: 'm' },
+        { t: 'Role of Civil Services', d: 'm' },
+        { t: 'Social Audit & Grievance Redressal', d: 'm' },
+      ]},
+      { name: 'Social Justice', topics: [
+        { t: 'Welfare Schemes — Women & Children', d: 'e' },
+        { t: 'Health Sector — NHM, Ayushman Bharat', d: 'm' },
+        { t: 'Education — NEP, RTE Act', d: 'm' },
+        { t: 'Poverty & Hunger Alleviation', d: 'm' },
+        { t: 'SC/ST/OBC — Reservations & Protection', d: 'h' },
+      ]},
+      { name: 'International Relations', topics: [
+        { t: 'India\'s Foreign Policy — Principles', d: 'm' },
+        { t: 'Neighbourhood First Policy', d: 'm' },
+        { t: 'India-US Relations', d: 'm' },
+        { t: 'India-China Border Disputes', d: 'h' },
+        { t: 'India-Russia Defence Ties', d: 'm' },
+        { t: 'India & Multilateral Forums (UN, G20, BRICS)', d: 'm' },
+        { t: 'India & South Asia (SAARC, BIMSTEC)', d: 'm' },
+      ]},
+    ]
+  },
+  {
+    id: 'gs3', label: 'GS Paper III', cls: 'card-gs3',
+    title: 'GS Paper III — Economy, Science & Security',
+    subtitle: 'Economy · Agriculture · S&T · Environment · Security',
+    groups: [
+      { name: 'Indian Economy', topics: [
+        { t: 'Planning — Five Year Plans & NITI Aayog', d: 'm' },
+        { t: 'GDP, GNP, GVA — Basics', d: 'e' },
+        { t: 'Budget — Fiscal Policy & Deficit Types', d: 'h' },
+        { t: 'Monetary Policy & RBI', d: 'h' },
+        { t: 'Banking System & NBFCs', d: 'm' },
+        { t: 'Inflation — Types & Indices (CPI, WPI)', d: 'm' },
+        { t: 'Trade Policy — WTO, FTAs', d: 'h' },
+        { t: 'Balance of Payments', d: 'h' },
+        { t: 'Investment Models — PPP, FDI, FII', d: 'm' },
+        { t: 'Infrastructure — Roads, Railways, Ports', d: 'e' },
+      ]},
+      { name: 'Agriculture', topics: [
+        { t: 'Green Revolution & its Legacy', d: 'm' },
+        { t: 'MSP, Procurement & Food Security', d: 'h' },
+        { t: 'Irrigation Systems & Water Management', d: 'm' },
+        { t: 'Agricultural Reforms — APMC, Land', d: 'h' },
+        { t: 'Allied Sectors — Animal Husbandry, Fisheries', d: 'e' },
+      ]},
+      { name: 'Science & Technology', topics: [
+        { t: 'Space — ISRO Missions (Chandrayaan, Gaganyaan)', d: 'm' },
+        { t: 'Nuclear Energy & India\'s Policy', d: 'h' },
+        { t: 'Defence Tech — DRDO, Make in India', d: 'm' },
+        { t: 'Biotechnology & GMOs', d: 'h' },
+        { t: 'Artificial Intelligence & Robotics', d: 'm' },
+        { t: 'Cybersecurity Fundamentals', d: 'm' },
+        { t: 'Emerging Tech — Quantum, 5G, Blockchain', d: 'h' },
+      ]},
+      { name: 'Environment & Ecology', topics: [
+        { t: 'Ecology Basics — Ecosystem, Food Web', d: 'e' },
+        { t: 'Biodiversity — Hotspots, IUCN Red List', d: 'm' },
+        { t: 'Climate Change — IPCC, Paris Agreement', d: 'h' },
+        { t: 'Environmental Laws in India', d: 'm' },
+        { t: 'National Parks & Wildlife Sanctuaries', d: 'e' },
+        { t: 'Pollution — Air, Water, Soil, Noise', d: 'm' },
+        { t: 'Disaster Management — NDMA, Sendai', d: 'm' },
+      ]},
+      { name: 'Internal Security', topics: [
+        { t: 'Terrorism — Domestic & Cross-border', d: 'h' },
+        { t: 'Left Wing Extremism (Naxalism)', d: 'h' },
+        { t: 'North-East Insurgencies', d: 'm' },
+        { t: 'Money Laundering & Organised Crime', d: 'm' },
+        { t: 'Border Management & Coastal Security', d: 'm' },
+      ]},
+    ]
+  },
+  {
+    id: 'gs4', label: 'GS Paper IV', cls: 'card-gs4',
+    title: 'GS Paper IV — Ethics & Integrity',
+    subtitle: 'Ethics · Integrity · Aptitude · Case Studies',
+    groups: [
+      { name: 'Ethics Theory', topics: [
+        { t: 'Essence & Sources of Ethics', d: 'e' },
+        { t: 'Attitude, Emotional Intelligence', d: 'm' },
+        { t: 'Moral Thinkers — Gandhiji, Kant, Aristotle', d: 'h' },
+        { t: 'Contribution of Family & Society', d: 'e' },
+        { t: 'Ethical Concerns in Public Administration', d: 'm' },
+        { t: 'Corporate Governance & Ethics', d: 'm' },
+      ]},
+      { name: 'Integrity & Aptitude', topics: [
+        { t: 'Integrity — Honesty in Administration', d: 'e' },
+        { t: 'Work Culture & Dedication to Service', d: 'e' },
+        { t: 'Codes of Conduct — AIS, Central Services', d: 'm' },
+        { t: 'Conflict of Interest & Corruption', d: 'h' },
+        { t: 'Citizen Charter & Quality of Service', d: 'e' },
+      ]},
+      { name: 'Case Studies', topics: [
+        { t: 'Policy Dilemma Cases', d: 'h' },
+        { t: 'Corruption & Whistleblower Cases', d: 'h' },
+        { t: 'Disaster Relief Administration Cases', d: 'm' },
+        { t: 'Social Justice Administration Cases', d: 'm' },
+        { t: 'Environment vs Development Cases', d: 'h' },
+        { t: 'Practice: Writing Ethical Answers', d: 'h' },
+      ]},
+    ]
+  },
+  {
+    id: 'csat', label: 'CSAT', cls: 'card-csat',
+    title: 'CSAT — Civil Services Aptitude Test',
+    subtitle: 'Paper II — Qualifying (33% cutoff)',
+    groups: [
+      { name: 'Comprehension', topics: [
+        { t: 'Reading Comprehension — Speed & Accuracy', d: 'e' },
+        { t: 'Inference-based Questions', d: 'm' },
+        { t: 'Decision Making in Passages', d: 'm' },
+      ]},
+      { name: 'Reasoning & Mental Ability', topics: [
+        { t: 'Series Completion', d: 'e' },
+        { t: 'Analogy & Classification', d: 'e' },
+        { t: 'Coding-Decoding', d: 'm' },
+        { t: 'Blood Relations', d: 'm' },
+        { t: 'Direction Sense', d: 'e' },
+        { t: 'Logical Reasoning — Syllogisms', d: 'h' },
+        { t: 'Statement & Conclusions', d: 'm' },
+      ]},
+      { name: 'Mathematics & Data Interpretation', topics: [
+        { t: 'Number System', d: 'm' },
+        { t: 'Percentage & Ratios', d: 'e' },
+        { t: 'Time, Speed & Distance', d: 'm' },
+        { t: 'Data Interpretation — Tables, Charts', d: 'h' },
+        { t: 'Profit-Loss & Averages', d: 'e' },
+      ]},
+    ]
+  },
+  {
+    id: 'anthro', label: 'Optional', cls: 'card-anthro',
+    title: 'Anthropology — Optional Subject',
+    subtitle: 'Paper I (Theory) + Paper II (Indian)',
+    groups: [
+      { name: 'Paper I — Biological Anthropology', topics: [
+        { t: 'Human Evolution — Primates to Homo Sapiens', d: 'h' },
+        { t: 'Fossil Evidence — Australopithecus, Erectus', d: 'h' },
+        { t: 'Genetics & Heredity — Mendelism', d: 'h' },
+        { t: 'Population Genetics — Hardy-Weinberg', d: 'h' },
+        { t: 'Human Growth & Development', d: 'm' },
+        { t: 'Concept of Race & Racism', d: 'm' },
+        { t: 'Forensic Anthropology', d: 'm' },
+      ]},
+      { name: 'Paper I — Social & Cultural Anthropology', topics: [
+        { t: 'Nature & Scope of Anthropology', d: 'e' },
+        { t: 'Culture, Society & Community', d: 'e' },
+        { t: 'Marriage, Family & Kinship', d: 'h' },
+        { t: 'Political Organisation & Social Control', d: 'm' },
+        { t: 'Economic Anthropology', d: 'm' },
+        { t: 'Religion, Magic & Witchcraft', d: 'm' },
+        { t: 'Theories of Culture — Functionalism, Structuralism', d: 'h' },
+        { t: 'Applied Anthropology', d: 'm' },
+        { t: 'Anthropology & Colonialism', d: 'm' },
+      ]},
+      { name: 'Paper I — Archaeology', topics: [
+        { t: 'Prehistory & Neolithic Cultures', d: 'h' },
+        { t: 'Archaeological Dating Methods', d: 'h' },
+        { t: 'Stone Age Cultures in India', d: 'm' },
+        { t: 'Harappan Civilisation (Anthropological Perspective)', d: 'm' },
+      ]},
+      { name: 'Paper II — Indian Anthropology', topics: [
+        { t: 'Unity & Diversity in Indian Culture', d: 'e' },
+        { t: 'Linguistic & Religious Minorities', d: 'm' },
+        { t: 'Caste System — Origin & Change', d: 'h' },
+        { t: 'Sacred Complex & Great/Little Tradition', d: 'h' },
+        { t: 'Peasant & Agrarian Movements', d: 'm' },
+      ]},
+      { name: 'Paper II — Tribal India', topics: [
+        { t: 'Tribal Situation in India — Constitutional Provisions', d: 'h' },
+        { t: 'Colonial Policies & Tribal Revolts', d: 'h' },
+        { t: 'Problems of Tribes — Land, Forest, Displacement', d: 'h' },
+        { t: 'Development Programmes for Tribes', d: 'm' },
+        { t: 'Concept of DNT & PVTG', d: 'm' },
+        { t: 'Major Tribes — Santhal, Bhil, Gond, Naga', d: 'm' },
+        { t: 'Tribal Movements — Jharkhand, North-East', d: 'h' },
+      ]},
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════
+//  STORAGE HELPERS
+// ═══════════════════════════════════════════
+const LS_TOPICS_KEY = 'upsc_topics_v2';
+const LS_STREAK_KEY = 'upsc_streak_v2';
+const LS_CHECKIN_KEY = 'upsc_checkin_v2';
+
+function loadChecked() {
+  try { return JSON.parse(localStorage.getItem(LS_TOPICS_KEY) || '{}'); } catch { return {}; }
+}
+function saveChecked(obj) { localStorage.setItem(LS_TOPICS_KEY, JSON.stringify(obj)); }
+function loadStreak() {
+  try { return JSON.parse(localStorage.getItem(LS_STREAK_KEY) || '{"count":0,"days":[]}'); } catch { return {count:0,days:[]}; }
+}
+function saveStreak(s) { localStorage.setItem(LS_STREAK_KEY, JSON.stringify(s)); }
+
+let checked = loadChecked();
+let streak = loadStreak();
+
+// ═══════════════════════════════════════════
+//  COUNTDOWN
+// ═══════════════════════════════════════════
+const START_DATE = new Date();
+START_DATE.setHours(0,0,0,0);
+const TARGET_DATE = new Date(START_DATE);
+TARGET_DATE.setDate(TARGET_DATE.getDate() + 300);
+
+function tick() {
+  const now = new Date();
+  const diff = TARGET_DATE - now;
+  if (diff <= 0) { document.getElementById('cd-days').textContent = '000'; return; }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-days').textContent = String(d).padStart(3,'0');
+  document.getElementById('cd-hrs').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-min').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-sec').textContent = String(s).padStart(2,'0');
+  document.getElementById('days-left-stat').textContent = d;
+}
+setInterval(tick, 1000); tick();
+
+// ═══════════════════════════════════════════
+//  DATE
+// ═══════════════════════════════════════════
+const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-IN', opts);
+
+// ═══════════════════════════════════════════
+//  RENDER SUBJECTS
+// ═══════════════════════════════════════════
+function makeTopicId(subjectId, groupName, topicText) {
+  return `${subjectId}||${groupName}||${topicText}`;
+}
+
+function getSubjectStats(subject) {
+  let total = 0, done = 0;
+  subject.groups.forEach(g => g.topics.forEach(t => {
+    total++;
+    if (checked[makeTopicId(subject.id, g.name, t.t)]) done++;
+  }));
+  return { total, done, pct: total ? Math.round(done/total*100) : 0 };
+}
+
+function getAllTopics() {
+  const all = [];
+  SUBJECTS.forEach(s => s.groups.forEach(g => g.topics.forEach(t => {
+    all.push({ id: makeTopicId(s.id, g.name, t.t), text: t.t, subject: s.title.split('—')[0].trim() });
+  })));
+  return all;
+}
+
+function renderSubjects() {
+  const grid = document.getElementById('subjects-grid');
+  grid.innerHTML = '';
+  SUBJECTS.forEach(s => {
+    const stats = getSubjectStats(s);
+    const card = document.createElement('div');
+    card.className = `subject-card ${s.cls}`;
+    card.innerHTML = `
+      <div class="card-header" id="hdr-${s.id}" onclick="toggleCard('${s.id}')">
+        <div class="card-header-top">
+          <span class="card-badge">${s.label}</span>
+          <span class="card-toggle-icon" id="icon-${s.id}">▾</span>
+        </div>
+        <div class="card-title">${s.title}</div>
+        <div class="card-subtitle">${s.subtitle}</div>
+        <div class="card-progress-row">
+          <div class="mini-bar"><div class="mini-bar-fill" id="bar-${s.id}" style="width:${stats.pct}%"></div></div>
+          <div class="mini-pct" id="pct-${s.id}">${stats.pct}%</div>
+        </div>
+      </div>
+      <div class="card-body" id="body-${s.id}">
+        ${s.groups.map(g => `
+          <div class="topic-group-label">${g.name}</div>
+          ${g.topics.map(tp => {
+            const tid = makeTopicId(s.id, g.name, tp.t);
+            const isDone = !!checked[tid];
+            const diffClass = tp.d === 'h' ? 'diff-h' : tp.d === 'm' ? 'diff-m' : 'diff-e';
+            const diffLabel = tp.d === 'h' ? 'Hard' : tp.d === 'm' ? 'Med' : 'Easy';
+            return `<div class="topic-item${isDone?' done':''}" id="row-${CSS.escape(tid)}" onclick="toggleTopic('${s.id}','${g.name}','${tp.t.replace(/'/g,"\\'")}')">
+              <input type="checkbox" class="topic-cb" ${isDone?'checked':''} onclick="event.stopPropagation();toggleTopic('${s.id}','${g.name}','${tp.t.replace(/'/g,"\\'")}')"/>
+              <span class="topic-label">${tp.t}</span>
+              <span class="topic-difficulty ${diffClass}">${diffLabel}</span>
+            </div>`;
+          }).join('')}
+        `).join('')}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function toggleCard(id) {
+  const body = document.getElementById(`body-${id}`);
+  const hdr = document.getElementById(`hdr-${id}`);
+  const icon = document.getElementById(`icon-${id}`);
+  body.classList.toggle('open');
+  hdr.classList.toggle('open');
+}
+
+function toggleTopic(subjectId, groupName, topicText) {
+  const tid = makeTopicId(subjectId, groupName, topicText);
+  checked[tid] = !checked[tid];
+  saveChecked(checked);
+
+  // Update row
+  const rowId = 'row-' + CSS.escape(tid);
+  const row = document.getElementById(rowId);
+  if (row) {
+    row.classList.toggle('done', checked[tid]);
+    const cb = row.querySelector('.topic-cb');
+    if (cb) cb.checked = checked[tid];
+  }
+
+  updateStats();
+  refreshOracle();
+  showToast(checked[tid] ? '✅ Topic marked complete!' : '↩ Topic unchecked');
+}
+
+// ═══════════════════════════════════════════
+//  STATS UPDATE
+// ═══════════════════════════════════════════
+function updateStats() {
+  let totalAll = 0, doneAll = 0;
+  SUBJECTS.forEach(s => {
+    const st = getSubjectStats(s);
+    totalAll += st.total; doneAll += st.done;
+    const bar = document.getElementById(`bar-${s.id}`);
+    const pct = document.getElementById(`pct-${s.id}`);
+    if (bar) bar.style.width = st.pct + '%';
+    if (pct) pct.textContent = st.pct + '%';
+  });
+  const pctAll = totalAll ? Math.round(doneAll/totalAll*100) : 0;
+  document.getElementById('overall-bar').style.width = pctAll + '%';
+  document.getElementById('overall-pct').textContent = pctAll + '%';
+  document.getElementById('total-done').textContent = doneAll;
+  document.getElementById('total-remaining').textContent = totalAll - doneAll;
+}
+
+// ═══════════════════════════════════════════
+//  ORACLE — DAILY TOPIC PICKER
+// ═══════════════════════════════════════════
+function refreshOracle() {
+  const all = getAllTopics().filter(t => !checked[t.id]);
+  const container = document.getElementById('oracle-topics');
+  if (!all.length) {
+    container.innerHTML = '<span class="oracle-topic-chip">🎉 All topics completed! You\'re ready!</span>';
+    return;
+  }
+  const shuffled = all.sort(() => Math.random()-0.5).slice(0,3);
+  container.innerHTML = shuffled.map(t =>
+    `<span class="oracle-topic-chip" title="${t.subject}">📌 ${t.text}</span>`
+  ).join('');
+}
+
+// ═══════════════════════════════════════════
+//  STREAK
+// ═══════════════════════════════════════════
+function checkin() {
+  const today = new Date().toDateString();
+  const last = localStorage.getItem(LS_CHECKIN_KEY);
+  if (last === today) { showToast('⭐ Already checked in today!'); return; }
+
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (last !== yesterday.toDateString()) { streak.count = 0; streak.days = []; }
+
+  streak.count++;
+  streak.days.push(today);
+  if (streak.days.length > 7) streak.days = streak.days.slice(-7);
+
+  saveStreak(streak);
+  localStorage.setItem(LS_CHECKIN_KEY, today);
+  renderStreak();
+  showToast(`🔥 Streak: ${streak.count} days! Keep going!`);
+}
+
+function renderStreak() {
+  document.getElementById('streak-display').textContent = streak.count;
+  document.getElementById('streak-count').textContent = streak.count;
+  const today = new Date().toDateString();
+  const dots = document.getElementById('streak-dots');
+  const last7 = Array.from({length:7}, (_,i) => {
+    const d = new Date(); d.setDate(d.getDate()-6+i); return d.toDateString();
+  });
+  dots.innerHTML = last7.map(day => {
+    const isToday = day === today;
+    const isActive = streak.days.includes(day);
+    const cls = isToday && isActive ? 'today' : isActive ? 'active' : '';
+    return `<div class="streak-dot ${cls}" title="${day}">✓</div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+renderSubjects();
+updateStats();
+renderStreak();
+refreshOracle();
+</script>
+</body>
+</html>
